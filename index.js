@@ -4,7 +4,7 @@ const http = require('http');
 const port = process.env.PORT || 3000;
 
 //mysql://b4e7f2fbf8aa92:89923471@us-cdbr-east-03.cleardb.com/heroku_1abbed335eaacbe?reconnect=true//
-const dbConfig = {
+const dbConfigHeroku = {
 	host: "us-cdbr-east-03.cleardb.com",
 	user: "b4e7f2fbf8aa92",
 	password: "89923471",
@@ -13,7 +13,22 @@ const dbConfig = {
 	reconnect: true
 };
 
-var database = mysql.createPool(dbConfig);
+
+const dbConfigLocal={
+	host: "127.0.0.1",
+	user: "root",
+	password: "2155",
+	multipleStatements: false,
+	reconnect: true
+}
+
+
+if (process.env.IS_HEROKU){
+	var database = mysql.createPool(dbConfigHeroku);
+}
+else{
+	var database = mysql.createPool(dbConfigLocal);	
+}
 
 database.getConnection((err, dbConnection) => {
 	if (!err) {
